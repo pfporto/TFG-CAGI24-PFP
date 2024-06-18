@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+#MariaDB Container
+  mariadb:
+    image: mariadb:10.7
+    container_name: mariadb
+    hostname: mariadb
+    environment:
+      - MARIADB_ROOT_PASSWORD=password
+      - MARIADB_DATABASE=glpidb
+      - MARIADB_USER=glpi_user
+      - MARIADB_PASSWORD=glpi
+    #ipv4_address: 172.21.0.2
+    volumes:
+      - /docker/glpi_db:/var/lib/mysql
+
+#GLPI Container
+  glpi:
+    image: diouxx/glpi
+    container_name : glpi
+    hostname: glpi
+    ports:
+      - "8082:80"
+    volumes:
+      - /docker/glpi:/var/www/html/glpi
+    #ipv4_address: 172.21.0.3
+    depends_on:
+     - mariadb
+
